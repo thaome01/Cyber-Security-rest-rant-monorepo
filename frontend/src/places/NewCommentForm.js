@@ -73,3 +73,5 @@ function NewCommentForm({ place, onSubmit }) {
 }
 
 export default NewCommentForm
+
+

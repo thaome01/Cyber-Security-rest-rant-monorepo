@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { CurrentUser } from '../contexts/CurrentUser'
 
 function CommentCard({ comment, onDelete }) {
+
     const { currentUser } = useContext(CurrentUser)
 
     let deleteButton = null;
@@ -13,6 +14,7 @@ function CommentCard({ comment, onDelete }) {
             </button>
         )
     }
+
     return (
         <div className="border col-sm-4">
             <h2 className="rant">{comment.rant ? 'Rant! 😡' : 'Rave! 😻'}</h2>
