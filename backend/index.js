@@ -2,22 +2,12 @@
 require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
-const cors = require('cors')
+const cors = require('cors');
 const app = express();
-const cookieSession = require('cookie-session')
 const defineCurrentUser = require('./middleware/defineCurrentUser')
 
 // Express Settings
-app.use(cookieSession({
-    name: 'session',
-    keys: [ process.env.SESSION_SECRET ],
-    sameSite: 'strict',
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-}))
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-}))
+app.use(cors())
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json())
