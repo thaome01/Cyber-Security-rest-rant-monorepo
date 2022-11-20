@@ -1,31 +1,30 @@
-import { useContext } from "react";
-import { CurrentUser } from '../contexts/CurrentUser'
+import { useEffect, createContext, useState } from "react";
 
-function CommentCard({ comment, onDelete }) {
 
-    const { currentUser } = useContext(CurrentUser)
+export const CurrentUser = createContext()
 
-    let deleteButton = null;
+function CurrentUserProvider({ children }) {
 
-    if (currentUser?.userId === comment.authorId) {
-        deleteButton = (
-            <button className="btn btn-danger" onClick={onDelete} >
-                Delete Comment
-            </button>
-        )
-    }
+    const [currentUser, setCurrentUser] = useState(null)
+
+    useEffect(() => {
+        const getLoggedInUser = async () => {
+            let response = await fetch('http://localhost:5000/authentication/profile', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            let user = await response.json()
+            setCurrentUser(user)
+        }
+        getLoggedInUser()
+    }, [])
 
     return (
-        <div className="border col-sm-4">
-            <h2 className="rant">{comment.rant ? 'Rant! 😡' : 'Rave! 😻'}</h2>
-            <h4>{comment.content}</h4>
-            <h3>
-                <strong>- {comment.author.firstName} {comment.author.lastName}</strong>
-            </h3>
-            <h4>Rating: {comment.stars}</h4>
-            {deleteButton}
-        </div>
+        <CurrentUser.Provider value={{ currentUser, setCurrentUser }}>
+            {children}
+        </CurrentUser.Provider>
     )
 }
 
-export default CommentCard;
+export default CurrentUserProvider
